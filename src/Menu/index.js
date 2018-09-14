@@ -1,7 +1,8 @@
 import React from 'react'
-
 import { Tab } from 'semantic-ui-react'
+
 import CreateTicketForm from '../CreateTicket'
+import ShowTickets from '../ShowTickets'
 
 const panes = [
   {
@@ -14,7 +15,11 @@ const panes = [
   },
   {
     menuItem: 'Show tickets',
-    render: () => <Tab.Pane>Tab 2 Content</Tab.Pane>
+    render: () => (
+      <Tab.Pane>
+        <ShowTickets />
+      </Tab.Pane>
+    )
   }
 ]
 
