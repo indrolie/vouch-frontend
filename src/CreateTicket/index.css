@@ -1,0 +1,34 @@
+.container {
+  width: 100%;
+  height: 100%;
+  margin: 0px;
+  padding: 0px;
+}
+
+.form-create-ticket {
+  margin: 50px;
+  text-align: left;
+}
+
+.ui.button-submit {
+  background-color: #698bc5;
+  margin-top: 40px;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+}
+
+.ui.form textarea.worknotes {
+  background-color: #ffdfa2;
+  color: black;
+}
+
+.ui.form textarea.worknotes::placeholder {
+  color: black;
+  opacity: 0.6; /* Firefox */
+}
+
+.ui.grid.input-field {
+  margin-bottom: 40px;
+}
