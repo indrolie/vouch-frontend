@@ -56,7 +56,7 @@ export default class CreateTicketForm extends React.Component {
               <Grid.Column width={3}>
                 <label>Phone Number</label>
               </Grid.Column>
-              <Grid.Column width={5}>
+              <Grid.Column>
                 <Input name='phoneNumber' placeholder="Your phone number" onChange={this.handleChange} />
               </Grid.Column>
             </Grid.Row>
@@ -65,7 +65,7 @@ export default class CreateTicketForm extends React.Component {
               <Grid.Column width={3}>
                 <label>Email</label>
               </Grid.Column>
-              <Grid.Column width={5}>
+              <Grid.Column>
                 <Input name='email' type="email" placeholder="Your email"  onChange={this.handleChange}/>
               </Grid.Column>
             </Grid.Row>
@@ -75,7 +75,7 @@ export default class CreateTicketForm extends React.Component {
                 <label>Description</label>
               </Grid.Column>
               <Grid.Column>
-                <Input fluid name='description' width={10} placeholder="Issue short description"  onChange={this.handleChange}/>
+                <Input fluid name='description' placeholder="Issue short description"  onChange={this.handleChange}/>
               </Grid.Column>
             </Grid.Row>
           </Grid>

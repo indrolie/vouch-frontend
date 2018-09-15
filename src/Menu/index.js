@@ -25,8 +25,6 @@ const panes = [
 
 const MyMenu = () => (
   <Tab
-    menu={{ fluid: true, vertical: true }}
-    menuPosition="left"
     panes={panes}
   />
 )

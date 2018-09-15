@@ -131,7 +131,7 @@ export default class ShowTickets extends React.Component {
 
     if (this.state.showDetails) {
       return (
-        <div className="container">
+        <div>
           <div className="buttons" >
             <Button className="button-return" onClick={this.handleReturn}>
             Return
@@ -140,7 +140,7 @@ export default class ShowTickets extends React.Component {
               {this.state.status}
             </TicketButton>
           </div>
-          <Form className="form-create-ticket">
+          <Form className="ticket-details">
             <Grid className="input-field">
               <Grid.Row columns={4}>
                 <Grid.Column width={3}>
@@ -224,7 +224,7 @@ export default class ShowTickets extends React.Component {
       )
     } else {
       return (
-        <div>
+        <div className="wrapper">
           <Dropdown text='Filter' icon='filter' floating labeled button className='icon'>
             <Dropdown.Menu>
               <Dropdown.Header content='Status' />

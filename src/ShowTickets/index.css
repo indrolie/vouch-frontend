@@ -1,15 +1,25 @@
-.ui.button.buttons-action{
-    color: white;
-    background-color: #679fff;
+.wrapper {
+  margin: auto;
+  margin-top: 30px;
+  width: 90%;
 }
 
-.buttons{
-    margin-left: 40px;
-    margin-top: 10px;
-    display: flex;
+.ui.button.buttons-action {
+  color: white;
+  background-color: #679fff;
 }
 
-.ui.button-return{
-    color: white;
-    background-color: #679fff !important;
+.buttons {
+  margin-left: 40px;
+  margin-top: 10px;
+  display: flex;
+}
+
+.ui.button-return {
+  color: white;
+  background-color: #679fff !important;
+}
+
+.ticket-details{
+  margin: 50px;
 }
