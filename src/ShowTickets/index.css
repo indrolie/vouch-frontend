@@ -3,8 +3,13 @@
     background-color: #679fff;
 }
 
+.buttons{
+    margin-left: 40px;
+    margin-top: 10px;
+    display: flex;
+}
+
 .ui.button-return{
     color: white;
-    margin-left: 20px;
-    margin-top: 10px;
+    background-color: #679fff !important;
 }

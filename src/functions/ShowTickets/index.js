@@ -11,6 +11,12 @@ const showTickets = (URL) => {
         reject(error.response)
       })
   })
+    .then(response => {
+      return (response)
+    })
+    .catch(response => {
+      return (response)
+    })
 }
 
 export default showTickets
