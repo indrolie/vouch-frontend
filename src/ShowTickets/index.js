@@ -7,13 +7,16 @@ import {
   Grid,
   Input,
   TextArea,
-  Dropdown
+  Dropdown,
+  Segment,
+  List
 } from 'semantic-ui-react'
 
 import showTickets from '../functions/ShowTickets'
-import updateTicket from '../functions/UpdateTicket'
 import deleteTicket from '../functions/DeleteTicket'
-import {storeLocalstorage} from '../functions/Localstorage'
+import addLogs from '../functions/AddLogs'
+import getTicketLogs from '../functions/GetTicketLogs'
+import { storeLocalstorage } from '../functions/Localstorage'
 import TicketButton from './TicketButton'
 
 import './index.css'
@@ -24,6 +27,7 @@ export default class ShowTickets extends React.Component {
 
     this.state = {
       tickets: [],
+      ticketLogs: [],
       showDetails: false,
       filterStatus: ''
     }
@@ -32,21 +36,58 @@ export default class ShowTickets extends React.Component {
   componentDidMount = async () => {
     const response = await showTickets('/')
 
-    this.setState({
-      tickets: response.data
-    })
+    response
+      ? this.setState({
+        tickets: response.data
+      })
+      : this.setState({
+        tickets: []
+      })
   };
 
-  updateParentStatus = async (status) => {
+  getTime = () => {
+    let today = new Date()
+    let dd = today.getDate()
+    let mm = today.getMonth() + 1 //+1 because january=0
+    let hh = today.getHours()
+    let min = today.getMinutes()
+    let ss = today.getSeconds()
+
+    const yyyy = today.getFullYear()
+    if (dd < 10) {
+      dd = '0' + dd
+    }
+    if (mm < 10) {
+      mm = '0' + mm
+    }
+    if (hh < 10) {
+      hh = '0' + hh
+    }
+    if (min < 10) {
+      min = '0' + min
+    }
+    if (ss < 10) {
+      ss = '0' + ss
+    }
+
+    today = hh + ':' + min + ':' + ss + '  ' + dd + '/' + mm + '/' + yyyy
+    return today
+  };
+
+  updateParentStatus = async status => {
     this.setState({
       status
     })
 
     const response = await showTickets('/')
-    this.setState({
-      tickets: response.data
-    })
-  }
+    response
+      ? this.setState({
+        tickets: response.data
+      })
+      : this.setState({
+        tickets: []
+      })
+  };
 
   handleChange = event => {
     this.setState({
@@ -68,6 +109,16 @@ export default class ShowTickets extends React.Component {
       showDetails: true
     })
 
+    const logs = await getTicketLogs(`/${ticketNumber}`)
+    
+    await this.setState({
+      ticketLogs: logs.data,
+    })
+
+    await this.setState({
+      updatedAt: this.state.ticketLogs[this.state.ticketLogs.length-1].updatedAt,
+    })
+
     storeLocalstorage('Ticket', ticketNumber)
   };
 
@@ -76,54 +127,68 @@ export default class ShowTickets extends React.Component {
 
     const response = await showTickets('/')
 
-    this.setState({
-      tickets: response.data
-    })
+    response
+      ? this.setState({
+        tickets: response.data
+      })
+      : this.setState({
+        tickets: []
+      })
   };
 
   handleReturn = async () => {
     const response = await showTickets('/')
 
-    this.setState({
-      tickets: response.data
-    })
+    response
+      ? this.setState({
+        tickets: response.data
+      })
+      : this.setState({
+        tickets: []
+      })
 
     this.setState({
       showDetails: false
     })
   };
 
-  handleUpdate = async (event) => {
-    event.preventDefault()
+  handleUpdate = async ticketNumber => {
+    const number = ticketNumber
 
     const data = {
-      logs: this.state.logs
+      ticketNumber: number,
+      logs: this.state.logs,
+      updatedAt: this.getTime()
     }
 
-    await updateTicket(`/${this.state.ticketNumber}` , data)
+    await addLogs(data)
   };
 
-  handleClickFilter = async (filterStatus) => {
+  handleClickFilter = async filterStatus => {
     await this.setState({
       filterStatus
     })
-  }
+  };
 
   render() {
     let tagOptions = [
       {
         text: 'Clear Filter',
         value: ''
-      },{
+      },
+      {
         text: 'Open',
         value: 'Open'
-      }, {
+      },
+      {
         text: 'Active',
         value: 'Active'
-      }, {
+      },
+      {
         text: 'Failed',
         value: 'Failed'
-      }, {
+      },
+      {
         text: 'Closed',
         value: 'Closed'
       }
@@ -132,9 +197,9 @@ export default class ShowTickets extends React.Component {
     if (this.state.showDetails) {
       return (
         <div>
-          <div className="buttons" >
+          <div className="buttons">
             <Button className="button-return" onClick={this.handleReturn}>
-            Return
+              Return
             </Button>
             <TicketButton updateParentStatus={this.updateParentStatus}>
               {this.state.status}
@@ -168,7 +233,7 @@ export default class ShowTickets extends React.Component {
                   <label>Updated at</label>
                 </Grid.Column>
                 <Grid.Column>
-                  <Input placeholder="" />
+                  <Input disabled value={this.state.updatedAt} />
                 </Grid.Column>
               </Grid.Row>
 
@@ -216,20 +281,51 @@ export default class ShowTickets extends React.Component {
               onChange={this.handleChange}
             />
 
-            <Button className="button-submit" onClick={this.handleUpdate}>
+            <Button
+              className="button-submit"
+              onClick={() => this.handleUpdate(this.state.ticketNumber)}
+            >
               Update
             </Button>
+
+            <Segment>
+              <List divided relaxed>
+                {this.state.ticketLogs.map((log, index) => {
+                  return (
+                    <List.Item key={index}>
+                      <List.Content>
+                        <List.Header>{log.updatedAt}</List.Header>
+                        {log.logs}
+                      </List.Content>
+                    </List.Item>
+                  )
+                })}
+              </List>
+            </Segment>
           </Form>
         </div>
       )
     } else {
       return (
         <div className="wrapper">
-          <Dropdown text='Filter' icon='filter' floating labeled button className='icon'>
+          <Dropdown
+            text="Filter"
+            icon="filter"
+            floating
+            labeled
+            button
+            className="icon"
+          >
             <Dropdown.Menu>
-              <Dropdown.Header content='Status' />
+              <Dropdown.Header content="Status" />
               <Dropdown.Menu scrolling>
-                {tagOptions.map(option => <Dropdown.Item key={option.value} {...option} onClick={() => this.handleClickFilter(option.value)} />)}
+                {tagOptions.map(option => (
+                  <Dropdown.Item
+                    key={option.value}
+                    {...option}
+                    onClick={() => this.handleClickFilter(option.value)}
+                  />
+                ))}
               </Dropdown.Menu>
             </Dropdown.Menu>
           </Dropdown>
@@ -270,7 +366,7 @@ export default class ShowTickets extends React.Component {
                       </Table.Cell>
                     </Table.Row>
                   )
-                } else if (this.state.filterStatus === '' ) {
+                } else if (this.state.filterStatus === '') {
                   return (
                     <Table.Row key={index + 1}>
                       <Table.Cell>{ticket.name}</Table.Cell>
