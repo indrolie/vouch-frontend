@@ -75,7 +75,7 @@ export default class CreateTicketForm extends React.Component {
                 <label>Description</label>
               </Grid.Column>
               <Grid.Column>
-                <Input name='description' width={10} placeholder="Issue short description"  onChange={this.handleChange}/>
+                <Input fluid name='description' width={10} placeholder="Issue short description"  onChange={this.handleChange}/>
               </Grid.Column>
             </Grid.Row>
           </Grid>

@@ -2,3 +2,9 @@
     color: white;
     background-color: #679fff;
 }
+
+.ui.button-return{
+    color: white;
+    margin-left: 20px;
+    margin-top: 10px;
+}

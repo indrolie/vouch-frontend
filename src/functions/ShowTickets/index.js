@@ -1,9 +1,9 @@
 import request from '../../helpers/axios'
 
-const showTickets = () => {
+const showTickets = (URL) => {
   return new Promise((resolve, reject) => {
     request
-      .get('/tickets')
+      .get(`/tickets${URL}`)
       .then(response => {
         resolve(response)
       })
