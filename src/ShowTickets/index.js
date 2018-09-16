@@ -9,7 +9,8 @@ import {
   TextArea,
   Dropdown,
   Segment,
-  List
+  List,
+  Modal
 } from 'semantic-ui-react'
 
 import showTickets from '../functions/ShowTickets'
@@ -105,19 +106,24 @@ export default class ShowTickets extends React.Component {
       email: response.data.email,
       description: response.data.description,
       createdAt: response.data.createdAt,
+      updatedAt: response.data.createdAt,
       status: response.data.status,
       showDetails: true
     })
 
     const logs = await getTicketLogs(`/${ticketNumber}`)
-    
-    await this.setState({
-      ticketLogs: logs.data,
-    })
 
     await this.setState({
-      updatedAt: this.state.ticketLogs[this.state.ticketLogs.length-1].updatedAt,
+      ticketLogs: logs.data
     })
+
+    if (this.state.ticketLogs.length !== 0) {
+      const lastLogs = this.state.ticketLogs[this.state.ticketLogs.length - 1]
+
+      await this.setState({
+        updatedAt: lastLogs.updatedAt
+      })
+    }
 
     storeLocalstorage('Ticket', ticketNumber)
   };
@@ -161,7 +167,17 @@ export default class ShowTickets extends React.Component {
       updatedAt: this.getTime()
     }
 
-    await addLogs(data)
+    const response = await addLogs(data)
+
+    if (response) {
+      this.setState({
+        message: response.request.statusText
+      })
+    } else {
+      this.setState({
+        message: 'Unable to reach the server. Please try again later.'
+      })
+    }
   };
 
   handleClickFilter = async filterStatus => {
@@ -169,6 +185,21 @@ export default class ShowTickets extends React.Component {
       filterStatus
     })
   };
+
+  handleButtonOk = async () =>{
+    const response = await showTickets('/')
+    response
+      ? this.setState({
+        tickets: response.data
+      })
+      : this.setState({
+        tickets: []
+      })
+
+    this.setState({
+      showDetails: false
+    })
+  }
 
   render() {
     let tagOptions = [
@@ -270,7 +301,6 @@ export default class ShowTickets extends React.Component {
                 </Grid.Column>
               </Grid.Row>
             </Grid>
-
             <label>Logs</label>
             <TextArea
               name="logs"
@@ -280,28 +310,37 @@ export default class ShowTickets extends React.Component {
               autoHeight
               onChange={this.handleChange}
             />
-
-            <Button
-              className="button-submit"
-              onClick={() => this.handleUpdate(this.state.ticketNumber)}
-            >
-              Update
-            </Button>
-
-            <Segment>
-              <List divided relaxed>
-                {this.state.ticketLogs.map((log, index) => {
-                  return (
-                    <List.Item key={index}>
-                      <List.Content>
-                        <List.Header>{log.updatedAt}</List.Header>
-                        {log.logs}
-                      </List.Content>
-                    </List.Item>
-                  )
-                })}
-              </List>
-            </Segment>
+            <Modal
+              trigger={
+                <Button
+                  className="button-submit"
+                  onClick={() => this.handleUpdate(this.state.ticketNumber)}
+                >
+                  Update
+                </Button>
+              }
+              header="Information"
+              content={this.state.message}
+              actions={[{ key: 'done', content: 'Ok', positive: true}]}
+              onActionClick={this.handleButtonOk}
+            />
+            <div className="ticket-logs">
+              Ticket Logs
+              <Segment>
+                <List divided relaxed>
+                  {this.state.ticketLogs.map((log, index) => {
+                    return (
+                      <List.Item key={index}>
+                        <List.Content>
+                          <List.Header>{log.updatedAt}</List.Header>
+                          {log.logs}
+                        </List.Content>
+                      </List.Item>
+                    )
+                  })}
+                </List>
+              </Segment>
+            </div>
           </Form>
         </div>
       )

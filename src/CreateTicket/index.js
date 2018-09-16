@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { Grid, Input, Button, Form, TextArea } from 'semantic-ui-react'
+import { Grid, Input, Button, Form, TextArea, Modal } from 'semantic-ui-react'
 import createTicket from '../functions/CreateTicket'
 
 import './index.css'
@@ -65,7 +65,17 @@ export default class CreateTicketForm extends React.Component {
       createdAt: this.getTime()
     }
 
-    await createTicket(data)
+    const response = await createTicket(data)
+
+    if (response){
+      this.setState({
+        message: response.request.statusText
+      })
+    } else {
+      this.setState({
+        message: 'Unable to reach the server. Please try again later.'
+      })
+    }
   };
 
   render() {
@@ -138,7 +148,12 @@ export default class CreateTicketForm extends React.Component {
             onChange={this.handleChange}
           />
 
-          <Button className="button-submit">Submit</Button>
+          <Modal
+            trigger={<Button className="button-submit">Submit</Button>}
+            header='Information'
+            content={this.state.message}
+            actions={[{ key: 'done', content: 'Ok', positive: true }]}
+          />
         </Form>
       </div>
     )
