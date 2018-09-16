@@ -69,7 +69,7 @@ export default class CreateTicketForm extends React.Component {
 
     if (response){
       this.setState({
-        message: response.request.statusText
+        message: response.data.message
       })
     } else {
       this.setState({
