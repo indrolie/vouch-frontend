@@ -63,7 +63,8 @@ export default class CreateTicketForm extends React.Component {
       email: this.state.email,
       description: this.state.description,
       logs: this.state.logs,
-      createdAt: this.getTime()
+      createdAt: this.getTime(),
+      updatedAt: this.getTime()
     }
 
     const response = await createTicket(data)
