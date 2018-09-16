@@ -30,7 +30,8 @@ export default class ShowTickets extends React.Component {
       tickets: [],
       ticketLogs: [],
       showDetails: false,
-      filterStatus: ''
+      filterStatus: '',
+      message: 'Updating the ticket....'
     }
   }
 

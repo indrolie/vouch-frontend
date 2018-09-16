@@ -14,7 +14,8 @@ export default class CreateTicketForm extends React.Component {
       phoneNumber: '',
       email: '',
       description: '',
-      logs: ''
+      logs: '',
+      message: 'Creating the ticket....'
     }
   }
 
