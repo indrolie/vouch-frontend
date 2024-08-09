@@ -1,7 +1,7 @@
 import axios from 'axios'
 
 const request = axios.create({
-  baseURL: 'https://vouch-backend-production.up.railway.app',
+  baseURL: process.env.REACT_APP_BACKEND_URL,
   timeout: 5000
 })
 
