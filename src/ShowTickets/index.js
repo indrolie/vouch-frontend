@@ -430,6 +430,8 @@ export default class ShowTickets extends React.Component {
                       </Table.Cell>
                     </Table.Row>
                   )
+                } else {
+                  return null;
                 }
               })}
             </Table.Body>
