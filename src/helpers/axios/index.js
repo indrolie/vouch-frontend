@@ -1,7 +1,7 @@
 import axios from 'axios'
 
 const request = axios.create({
-  baseURL: 'https://indrolie-vouch.herokuapp.com',
+  baseURL: 'vouch-backend-production.up.railway.app:8080',
   timeout: 5000
 })
 
